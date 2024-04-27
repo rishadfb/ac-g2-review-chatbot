@@ -25,8 +25,12 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
         <h1 className="mb-2 text-lg font-semibold">
           Welcome to the ActiveCampaign G2 Reviews AI Chatbot!
         </h1>
+        <p className="mb-2 leading-normal text-muted-foreground">
+          Query a knowledge base of 4,500 customer reviews from{' '}
+          <a href="https://g2.com">G2</a>.
+        </p>
         <p className="mb-6 leading-normal text-muted-foreground">
-          Gain insights into our customers and improve our product quality.
+          Ask questions and gain insights that can improve our product quality.
         </p>
         <p className="leading-normal text-muted-foreground">
           You can start a conversation here or try the following examples:
