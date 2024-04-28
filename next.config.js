@@ -10,6 +10,10 @@ module.exports = {
       {
         protocol: 'https',
         hostname: '**.googleusercontent.com'
+      },
+      {
+        protocol: 'https',
+        hostname: '**.ui-avatars.com'
       }
     ]
   }

@@ -17,11 +17,6 @@ export interface UserMenuProps {
   user: any
 }
 
-function getUserInitials(name: string) {
-  const [firstName, lastName] = name.split(' ')
-  return lastName ? `${firstName[0]}${lastName[0]}` : firstName.slice(0, 2)
-}
-
 export function UserMenu({ user }: UserMenuProps) {
   const router = useRouter()
 
@@ -36,29 +31,26 @@ export function UserMenu({ user }: UserMenuProps) {
     router.refresh()
   }
 
+  const getAvatarUrl = (user: any) => {
+    return `https://www.ui-avatars.com/api/?name=${user.user_metadata.name.replace(
+      /\s+/g,
+      '+'
+    )}`
+  }
+
   return (
     <div className="flex items-center justify-between">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="pl-0">
-            {user?.user_metadata.avatar_url ? (
-              <Image
-                height={60}
-                width={60}
-                className="h-6 w-6 select-none rounded-full ring-1 ring-zinc-100/10 transition-opacity duration-300 hover:opacity-80"
-                src={
-                  user?.user_metadata.avatar_url
-                    ? `${user.user_metadata.avatar_url}&s=60`
-                    : ''
-                }
-                alt={user.user_metadata.name ?? 'Avatar'}
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted/50 text-xs font-medium uppercase text-muted-foreground">
-                {getUserInitials(user?.user_metadata.name ?? user?.email)}
-              </div>
-            )}
+            <Image
+              height={60}
+              width={60}
+              className="h-6 w-6 select-none rounded-full ring-1 ring-zinc-100/10 transition-opacity duration-300 hover:opacity-80"
+              src={getAvatarUrl(user)}
+              alt={user.user_metadata.name ?? 'Avatar'}
+              referrerPolicy="no-referrer"
+            />
             <span className="ml-2">{user?.user_metadata.name ?? '👋🏼'}</span>
           </Button>
         </DropdownMenuTrigger>
