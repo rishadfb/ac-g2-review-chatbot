@@ -5,16 +5,17 @@ import { IconArrowRight } from '@/components/ui/icons'
 
 const exampleMessages = [
   {
-    heading: 'Explain technical concepts',
-    message: `What is a "serverless function"?`
+    heading: 'Find most used features',
+    message: 'What are the top 5 most used features in ActiveCampaign?'
   },
   {
-    heading: 'Summarize an article',
-    message: 'Summarize the following article for a 2nd grader: \n'
+    heading: 'Understand customer frustration',
+    message:
+      'What are the top 5 biggest frustrations users have with ActiveCampaign?'
   },
   {
-    heading: 'Draft an email',
-    message: `Draft an email to my boss about the following: \n`
+    heading: 'Product ideas',
+    message: `List 5 product ideas that could improve ActiveCampaign?`
   }
 ]
 
