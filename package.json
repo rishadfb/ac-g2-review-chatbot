@@ -24,7 +24,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.6",
     "@supabase/ssr": "^0.3.0",
-    "@supabase/supabase-js": "^2.26.0",
+    "@supabase/supabase-js": "^2.42.7",
     "@vercel/analytics": "^1.0.1",
     "@vercel/og": "^0.5.7",
     "ai": "^3.0.35",
