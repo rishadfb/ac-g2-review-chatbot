@@ -9,7 +9,7 @@ import { SidebarFooter } from '@/components/sidebar-footer'
 import { SidebarList } from '@/components/sidebar-list'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { Button } from '@/components/ui/button'
-import { IconNextChat, IconSeparator } from '@/components/ui/icons'
+import { IconActiveCampaign, IconSeparator } from '@/components/ui/icons'
 import { UserMenu } from '@/components/user-menu'
 import { cookies } from 'next/headers'
 
@@ -32,8 +32,7 @@ export async function Header() {
           </Sidebar>
         ) : (
           <Link href="/" target="_blank" rel="nofollow">
-            <IconNextChat className="mr-2 h-6 w-6 dark:hidden" inverted />
-            <IconNextChat className="mr-2 hidden h-6 w-6 dark:block" />
+            <IconActiveCampaign className="mr-2 h-6 w-6 rounded-md" />
           </Link>
         )}
         <div className="flex items-center">
