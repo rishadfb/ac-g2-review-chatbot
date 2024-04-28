@@ -55,7 +55,6 @@ export function UserMenu({ user }: UserMenuProps) {
                 className="h-6 w-6 select-none rounded-full ring-1 ring-zinc-100/10 transition-opacity duration-300 hover:opacity-80"
                 src={getAvatarUrl(user)}
                 alt={user.user_metadata.name ?? 'Avatar'}
-                referrerPolicy="no-referrer"
               />
             ) : (
               <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted/50 text-xs font-medium uppercase text-muted-foreground">
