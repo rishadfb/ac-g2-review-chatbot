@@ -38,6 +38,7 @@ export function LoginButton({
       }}
       disabled={isLoading}
       className={cn(className)}
+      size="lg"
       {...props}
     >
       {isLoading ? (
