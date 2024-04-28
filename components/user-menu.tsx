@@ -52,6 +52,7 @@ export function UserMenu({ user }: UserMenuProps) {
                     : ''
                 }
                 alt={user.user_metadata.name ?? 'Avatar'}
+                referrerPolicy="no-referrer"
               />
             ) : (
               <div className="flex h-7 w-7 shrink-0 select-none items-center justify-center rounded-full bg-muted/50 text-xs font-medium uppercase text-muted-foreground">
