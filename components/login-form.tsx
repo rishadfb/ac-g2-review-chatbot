@@ -1,15 +1,15 @@
 'use client'
 
+import { createBrowserClient } from '@supabase/ssr'
 import * as React from 'react'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 import { Button } from '@/components/ui/button'
 import { IconSpinner } from '@/components/ui/icons'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
-import Link from 'next/link'
-import { toast } from 'react-hot-toast'
-import { useRouter } from 'next/navigation'
 
 interface LoginFormProps extends React.ComponentPropsWithoutRef<'div'> {
   action: 'sign-in' | 'sign-up'
@@ -23,7 +23,10 @@ export function LoginForm({
   const [isLoading, setIsLoading] = React.useState(false)
   const router = useRouter()
   // Create a Supabase client configured to use cookies
-  const supabase = createClientComponentClient()
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   const [formState, setFormState] = React.useState<{
     email: string
