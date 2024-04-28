@@ -20,6 +20,9 @@ export default async function SignInPage() {
         <div className="flex justify-center">
           <LoginButton />
         </div>
+        <p className="mt-8 text-center text-sm">
+          This is not SSO. You will be redirected to Google.
+        </p>
       </div>
     </div>
   )
