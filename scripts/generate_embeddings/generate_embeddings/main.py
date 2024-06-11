@@ -27,7 +27,7 @@ def get_embedding(text):
 
 # Read the CSV file
 print("Reading CSV file...")
-df = pd.read_csv("data/g2_test.csv")
+df = pd.read_csv("data/g2_rev_data_one.csv")
 
 # Fill NaN values with an empty string
 df = df.fillna("")
@@ -52,28 +52,23 @@ print("Saving DataFrame to CSV...")
 df.to_csv("embeddings/g2_rev_data_one_embeddings.csv", index=False)
 
 # Prepare data for insertion
-print("Preparing data for insertion into Supabase...")
-data = []
-for index, row in df.iterrows():
-    data.append(
-        {
-            "reviewer_name": row["Reviewer Name"],
-            "reviewer_job_title": row["Reviewer Job Title"],
-            "reviewer_business_size": row["Reviewer Business Size"],
-            "rating": row["Rating"],
-            "review_date": row["Review Date"],
-            "review_title": row["Review Title"],
-            "review_likes": row["Review Likes"],
-            "review_dislikes": row["Review Dislikes"],
-            "review_problem": row["Review Problem"],
-            "review_recommendations": row["Review Recommendations"],
-            "review_link": row["Review Link"],
-            "embedding": row["embedding"],
-        }
-    )
-
-# Insert JSON data into Supabase
 print("Inserting data into Supabase...")
-response = supabase.table("reviews").upsert(data).execute()
+
+for index, row in df.iterrows():
+    data_row = {
+        "reviewer_name": row["Reviewer Name"],
+        "reviewer_job_title": row["Reviewer Job Title"],
+        "reviewer_business_size": row["Reviewer Business Size"],
+        "rating": row["Rating"],
+        "review_date": row["Review Date"],
+        "review_title": row["Review Title"],
+        "review_likes": row["Review Likes"],
+        "review_dislikes": row["Review Dislikes"],
+        "review_problem": row["Review Problem"],
+        "review_recommendations": row["Review Recommendations"],
+        "review_link": row["Review Link"],
+        "embedding": row["embedding"],
+    }
+    supabase.table("reviews").upsert(data_row).execute()
 
 print("Insertion complete.")
