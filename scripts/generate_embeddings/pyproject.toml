@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "generate-embeddings"
+version = "0.1.0"
+description = ""
+authors = ["Rishad Bharucha <rb2102@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "^2.2.2"
+openai = "^1.33.0"
+supabase = "^2.5.1"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
