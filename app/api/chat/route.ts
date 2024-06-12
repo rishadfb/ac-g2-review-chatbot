@@ -1,7 +1,7 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { cookies } from 'next/headers'
-import { Configuration, OpenAIApi } from 'openai-edge'
+import OpenAI from 'openai'
 import 'server-only'
 
 import { auth } from '@/auth'
@@ -9,11 +9,11 @@ import { nanoid } from '@/lib/utils'
 
 export const runtime = 'edge'
 
-const configuration = new Configuration({
+const configuration = {
   apiKey: process.env.OPENAI_API_KEY
-})
+}
 
-const openai = new OpenAIApi(configuration)
+const openai = new OpenAI(configuration)
 
 export async function POST(req: Request) {
   const cookieStore = cookies()
@@ -48,16 +48,15 @@ export async function POST(req: Request) {
     configuration.apiKey = previewToken
   }
 
-  const queryEmbedding = await openai.createEmbedding({
+  const queryEmbedding = await openai.embeddings.create({
     model: 'text-embedding-ada-002',
     input: messages[messages.length - 1].content
   })
 
   const {
     data: [{ embedding }]
-  } = await queryEmbedding.json()
+  } = await queryEmbedding
 
-  // Then use this embedding to search for matches
   const { data: reviews, error: matchError } = await supabase
     .rpc('match_reviews', {
       query_embedding: embedding,
@@ -68,24 +67,18 @@ export async function POST(req: Request) {
     )
     .limit(20)
 
-  console.log(reviews)
-
-  // Check for errors in fetching reviews
   if (matchError) {
     return new Response('Failed to fetch reviews', { status: 500 })
   }
 
-  // Prepare review messages for the chat prompt
   const reviewMessages = reviews.map(review => ({
     content: `Review: ${review.review_title}. Likes: ${review.review_likes}, Dislikes: ${review.review_dislikes}. Problems: ${review.review_problem}. Recommendations: ${review.review_recommendations}`,
-    role: 'system' // 'system' role can be used to indicate non-user-generated messages
+    role: 'system'
   }))
 
-  // Combine user messages with review messages
   const combinedMessages = [...reviewMessages, ...messages]
 
-  // Generate chat completion with combined messages
-  const res = await openai.createChatCompletion({
+  const res = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
     messages: combinedMessages,
     temperature: 0.7,
@@ -112,7 +105,6 @@ export async function POST(req: Request) {
           }
         ]
       }
-      // Insert chat into database.
       await supabase.from('chats').upsert({ id, payload }).throwOnError()
     }
   })
