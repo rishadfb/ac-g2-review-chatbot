@@ -11,10 +11,10 @@ import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Next.js AI Chatbot',
-    template: `%s - Next.js AI Chatbot`
+    default: 'ActiveCampaign G2 Reviews AI Chatbot',
+    template: `%s - ActiveCampaign G2 Reviews AI Chatbot`
   },
-  description: 'An AI-powered chatbot template built with Next.js and Vercel.',
+  description: 'Talk to a knowledge base of 4,500 customer reviews from G2.',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
