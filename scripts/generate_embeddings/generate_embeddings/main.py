@@ -1,5 +1,6 @@
-import json
 import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from multiprocessing import Pool, cpu_count
 from uuid import uuid4
 
 import pandas as pd
@@ -17,12 +18,10 @@ supabase_url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(supabase_url, supabase_key)
 
-
 # Function to generate embeddings using OpenAI
 def get_embedding(text):
     response = client.embeddings.create(model="text-embedding-ada-002", input=text)
     return response.data[0].embedding
-
 
 # Read the CSV file
 print("Reading CSV file...")
@@ -38,23 +37,37 @@ df["combined_review"] = df.apply(
     axis=1,
 )
 
-# Generate embeddings for each combined review
+# Generate embeddings for each combined review in parallel
 print("Generating embeddings for each review...")
-embeddings = [get_embedding(review) for review in df["combined_review"]]
 
-# Add embeddings to the Dataframe
-print("Adding embeddings to Dataframe...")
-df["embedding"] = embeddings
+
+def generate_embeddings_in_parallel(reviews):
+    with ThreadPoolExecutor(max_workers=cpu_count()) as executor:
+        future_to_review = {
+            executor.submit(get_embedding, review): review for review in reviews
+        }
+        embeddings = []
+        for future in as_completed(future_to_review):
+            review = future_to_review[future]
+            try:
+                embedding = future.result()
+                embeddings.append(embedding)
+            except Exception as exc:
+                print(f"Review {review} generated an exception: {exc}")
+                embeddings.append(None)
+    return embeddings
+
+
+df["embedding"] = generate_embeddings_in_parallel(df["combined_review"].tolist())
 
 # Save the Dataframe back to CSV
 print("Saving Dataframe to CSV...")
 df.to_csv("embeddings/g2_rev_data_one_embeddings.csv", index=False)
 
-# Prepare data for insertion
-print("Inserting data into Supabase...")
-
-for index, row in df.iterrows():
-    data_row = {
+# Prepare data for batch insertion
+print("Preparing data for insertion...")
+data_rows = [
+    {
         "reviewer_name": row["Reviewer Name"],
         "reviewer_job_title": row["Reviewer Job Title"],
         "reviewer_business_size": row["Reviewer Business Size"],
@@ -68,6 +81,18 @@ for index, row in df.iterrows():
         "review_link": row["Review Link"],
         "embedding": row["embedding"],
     }
-    supabase.table("reviews").upsert(data_row).execute()
+    for index, row in df.iterrows()
+]
+
+
+# Batch insert data into Supabase
+def batch_insert_to_supabase(data_rows, batch_size=100):
+    for i in range(0, len(data_rows), batch_size):
+        batch = data_rows[i : i + batch_size]
+        supabase.table("reviews").upsert(batch).execute()
+
+
+print("Inserting data into Supabase...")
+batch_insert_to_supabase(data_rows)
 
 print("Insertion complete.")
