@@ -34,7 +34,7 @@ df = df.fillna("")
 # Combine the review sections
 print("Combining review sections...")
 df["combined_review"] = df.apply(
-    lambda row: f"Likes: {row['Review Likes']} . Dislikes: {row['Review Dislikes']} . Problem: {row['Review Problem']} . Recommendations: {row['Review Recommendations']}",
+    lambda row: f"Title: {row['Review Title']} . Likes: {row['Review Likes']} . Dislikes: {row['Review Dislikes']} . Problem: {row['Review Problem']} . Recommendations: {row['Review Recommendations']}",
     axis=1,
 )
 
