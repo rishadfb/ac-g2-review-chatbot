@@ -5,7 +5,6 @@ from uuid import uuid4
 import pandas as pd
 from dotenv import load_dotenv
 from openai import OpenAI
-
 from supabase import Client, create_client
 
 load_dotenv()
