@@ -42,12 +42,12 @@ df["combined_review"] = df.apply(
 print("Generating embeddings for each review...")
 embeddings = [get_embedding(review) for review in df["combined_review"]]
 
-# Add embeddings to the DataFrame
-print("Adding embeddings to DataFrame...")
+# Add embeddings to the Dataframe
+print("Adding embeddings to Dataframe...")
 df["embedding"] = embeddings
 
-# Save the DataFrame back to CSV
-print("Saving DataFrame to CSV...")
+# Save the Dataframe back to CSV
+print("Saving Dataframe to CSV...")
 df.to_csv("embeddings/g2_rev_data_one_embeddings.csv", index=False)
 
 # Prepare data for insertion
