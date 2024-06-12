@@ -48,9 +48,46 @@ export async function POST(req: Request) {
     configuration.apiKey = previewToken
   }
 
+  const queryEmbedding = await openai.createEmbedding({
+    model: 'text-embedding-ada-002',
+    input: messages[messages.length - 1].content
+  })
+
+  const {
+    data: [{ embedding }]
+  } = await queryEmbedding.json()
+
+  // Then use this embedding to search for matches
+  const { data: reviews, error: matchError } = await supabase
+    .rpc('match_reviews', {
+      query_embedding: embedding,
+      match_threshold: 0.8
+    })
+    .select(
+      'review_title, review_likes, review_dislikes, review_problem, review_recommendations'
+    )
+    .limit(20)
+
+  console.log(reviews)
+
+  // Check for errors in fetching reviews
+  if (matchError) {
+    return new Response('Failed to fetch reviews', { status: 500 })
+  }
+
+  // Prepare review messages for the chat prompt
+  const reviewMessages = reviews.map(review => ({
+    content: `Review: ${review.review_title}. Likes: ${review.review_likes}, Dislikes: ${review.review_dislikes}. Problems: ${review.review_problem}. Recommendations: ${review.review_recommendations}`,
+    role: 'system' // 'system' role can be used to indicate non-user-generated messages
+  }))
+
+  // Combine user messages with review messages
+  const combinedMessages = [...reviewMessages, ...messages]
+
+  // Generate chat completion with combined messages
   const res = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
-    messages,
+    messages: combinedMessages,
     temperature: 0.7,
     stream: true
   })
@@ -68,7 +105,7 @@ export async function POST(req: Request) {
         createdAt,
         path,
         messages: [
-          ...messages,
+          ...combinedMessages,
           {
             content: completion,
             role: 'assistant'
