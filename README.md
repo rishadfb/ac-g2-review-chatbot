@@ -1,10 +1,10 @@
 <a href="https://chat.vercel.ai/">
   <img alt="Next.js 13 and app template Router-ready AI chatbot." src="https://chat.vercel.ai/opengraph-image.png" />
-  <h1 align="center">Next.js AI Chatbot</h1>
+  <h1 align="center">ActiveCampaign G2 Reviews AI Chatbot</h1>
 </a>
 
 <p align="center">
-  An open-source AI chatbot app template built with Next.js, the Vercel AI SDK, OpenAI, and Supabase Auth and Postgres DB.
+  Talk to a knowledge base of 4,500 customer reviews from G2. Built with Next.js, the Vercel AI SDK, OpenAI, and Supabase Auth and Postgres DB.
 </p>
 
 <p align="center">
