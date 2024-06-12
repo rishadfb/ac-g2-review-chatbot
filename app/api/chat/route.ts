@@ -63,7 +63,7 @@ export async function POST(req: Request) {
       match_threshold: 0.8
     })
     .select(
-      'review_title, review_likes, review_dislikes, review_problem, review_recommendations'
+      'review_title, review_likes, review_dislikes, review_problem, review_recommendations, review_link'
     )
     .limit(20)
 
@@ -79,9 +79,13 @@ export async function POST(req: Request) {
     )
     .join('\n')
 
+  const reviewLinks = reviews.map(review => review.review_link)
+
   const systemMessage = {
     role: 'system',
-    content: `In your answer, use the following relevant reviews. At the end of your answer, include some quotes from the reviews to support your answer:\n${reviewSummary}`
+    content: `In your answer, use the following relevant reviews. At the end of your answer, include some quotes from the reviews to support your answer:\n${reviewSummary}\n Also, here are the links to the reviews:\n${reviewLinks.join(
+      '\n'
+    )}. Next to each quote, include a link to the review you are quoting from.`
   }
 
   console.log('Reviews referenced:\n', systemMessage)
