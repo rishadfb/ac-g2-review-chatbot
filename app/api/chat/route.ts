@@ -80,9 +80,11 @@ export async function POST(req: Request) {
     .join('\n')
 
   const systemMessage = {
-    role: 'assistant',
-    content: `Here are some relevant reviews:\n${reviewSummary}`
+    role: 'system',
+    content: `In your answer, use the following relevant reviews. At the end of your answer, include some quotes from the reviews to support your answer:\n${reviewSummary}`
   }
+
+  console.log('Reviews referenced:\n', systemMessage)
 
   const combinedMessages = [systemMessage, ...messages]
 
