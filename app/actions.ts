@@ -122,7 +122,7 @@ export async function clearChats() {
         }
       }
     )
-    await supabase.from('chats').delete().throwOnError()
+    await supabase.from('chats').delete().neq('id', 0).throwOnError()
     revalidatePath('/')
     return redirect('/')
   } catch (error) {
