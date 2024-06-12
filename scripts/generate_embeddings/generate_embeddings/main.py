@@ -6,6 +6,7 @@ from uuid import uuid4
 import pandas as pd
 from dotenv import load_dotenv
 from openai import OpenAI
+
 from supabase import Client, create_client
 
 load_dotenv()
@@ -33,7 +34,7 @@ df = df.fillna("")
 # Combine the review sections
 print("Combining review sections...")
 df["combined_review"] = df.apply(
-    lambda row: f"Title: {row['Review Title']} . Likes: {row['Review Likes']} . Dislikes: {row['Review Dislikes']} . Problem: {row['Review Problem']} . Recommendations: {row['Review Recommendations']}",
+    lambda row: f"Reviewer's Business Size: {row['Reviewer Business Size']} . Reviewer's Job Title: {row['Reviewer Job Title']} . Review Date: {row['Review Date']} . Review Title: {row['Review Title']} . What Reviewer Likes: {row['Review Likes']} . What Reviewer Dislikes: {row['Review Dislikes']} . What Problems Reviewer Had: {row['Review Problem']} . Reviewer's Recommendations: {row['Review Recommendations']}",
     axis=1,
 )
 

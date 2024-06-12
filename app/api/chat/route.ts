@@ -63,7 +63,7 @@ export async function POST(req: Request) {
       match_threshold: 0.8
     })
     .select(
-      'review_title, review_likes, review_dislikes, review_problem, review_recommendations, review_link'
+      'review_title, review_likes, review_dislikes, review_problem, review_recommendations, review_link, reviewer_business_size, reviewer_job_title, review_date'
     )
     .limit(20)
 
@@ -75,7 +75,7 @@ export async function POST(req: Request) {
   const reviewSummary = reviews
     .map(
       review =>
-        `Title: ${review.review_title}. Likes: ${review.review_likes}, Dislikes: ${review.review_dislikes}. Problems: ${review.review_problem}. Recommendations: ${review.review_recommendations}`
+        `Reviewer's Business Size: ${review.reviewer_business_size} . Reviewer's Job Title: ${review.reviewer_job_title} . Review Date: ${review.review_date} . Review Title: ${review.review_title} . What Reviewer Likes: ${review.review_likes} . What Reviewer Dislikes: ${review.review_dislikes} . What Problems Reviewer Had: ${review.review_problem} . Reviewer's Recommendations: ${review.review_recommendations}`
     )
     .join('\n')
 
@@ -83,7 +83,7 @@ export async function POST(req: Request) {
 
   const systemMessage = {
     role: 'system',
-    content: `In your answer, use the following relevant reviews. At the end of your answer, include some quotes from the reviews to support your answer:\n${reviewSummary}\n Also, here are the links to the reviews:\n${reviewLinks.join(
+    content: `In your answer, use the following relevant reviews:\n${reviewSummary}\n Include some quotes from the reviews to support your answer. Here are the links to the reviews:\n${reviewLinks.join(
       '\n'
     )}. Next to each quote, include a link to the review you are quoting from.`
   }
