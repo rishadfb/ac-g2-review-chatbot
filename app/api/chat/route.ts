@@ -71,12 +71,20 @@ export async function POST(req: Request) {
     return new Response('Failed to fetch reviews', { status: 500 })
   }
 
-  const reviewMessages = reviews.map(review => ({
-    content: `Review: ${review.review_title}. Likes: ${review.review_likes}, Dislikes: ${review.review_dislikes}. Problems: ${review.review_problem}. Recommendations: ${review.review_recommendations}`,
-    role: 'system'
-  }))
+  // Create a message that summarizes the reviews
+  const reviewSummary = reviews
+    .map(
+      review =>
+        `Title: ${review.review_title}. Likes: ${review.review_likes}, Dislikes: ${review.review_dislikes}. Problems: ${review.review_problem}. Recommendations: ${review.review_recommendations}`
+    )
+    .join('\n')
 
-  const combinedMessages = [...reviewMessages, ...messages]
+  const systemMessage = {
+    role: 'assistant',
+    content: `Here are some relevant reviews:\n${reviewSummary}`
+  }
+
+  const combinedMessages = [systemMessage, ...messages]
 
   const res = await openai.chat.completions.create({
     model: 'gpt-3.5-turbo',
