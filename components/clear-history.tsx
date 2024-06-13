@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
-import { toast } from 'react-hot-toast'
+// import { toast } from 'react-hot-toast'
 
 import { ServerActionResult } from '@/lib/types'
 import { Button } from '@/components/ui/button'
@@ -53,10 +53,10 @@ export function ClearHistory({ clearChats }: ClearHistoryProps) {
               startTransition(async () => {
                 const result = await clearChats()
 
-                if (result && 'error' in result) {
-                  toast.error(result.error)
-                  return
-                }
+                // if (result && 'error' in result) {
+                //   toast.error(result.error)
+                //   return
+                // }
 
                 setOpen(false)
                 router.push('/')
