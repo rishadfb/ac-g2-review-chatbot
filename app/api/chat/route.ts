@@ -83,9 +83,9 @@ export async function POST(req: Request) {
 
   const systemMessage = {
     role: 'system',
-    content: `In your answer, use the following relevant reviews:\n${reviewSummary}\n Include some quotes from the reviews to support your answer. Here are the links to the reviews:\n${reviewLinks.join(
-      '\n'
-    )}. Next to each quote, include a link to the review you are quoting from.`
+    content: `When responding to the user's question, incorporate relevant reviews from the following review summary:\n${reviewSummary}\n
+  Include specific quotes from the reviews to support your answer. Ensure each quote is followed by a link to the review it came from. Use the following format for each quote: "Quote from the review" - [Link to the review].
+  Here are the links to the reviews:\n${reviewLinks.join('\n')}`
   }
 
   console.log('Reviews referenced:\n', systemMessage)
