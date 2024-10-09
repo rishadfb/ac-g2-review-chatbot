@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import { cookies } from 'next/headers'
 import OpenAI from 'openai'
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
   const combinedMessages = [systemMessage, ...messages]
 
   const res = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
+    model: 'gpt-4o-mini',
     messages: combinedMessages,
     temperature: 0.7,
     stream: true
